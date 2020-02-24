@@ -5,5 +5,7 @@ payroll/EmploymentNotFoundAdvice.class
 payroll/EmployeeRepository.class
 payroll/Employee.class
 payroll/Quote.class
+payroll/ExampleData.class
+payroll/ExamplePostResponse.class
 payroll/EmployeeNotFoundException.class
 payroll/LoadDatabase.class
