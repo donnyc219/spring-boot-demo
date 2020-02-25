@@ -1,11 +1,12 @@
 payroll/PayrollApplication.class
 payroll/Value.class
 payroll/EmployeeController.class
-payroll/EmploymentNotFoundAdvice.class
 payroll/EmployeeRepository.class
+payroll/SpringFoxConfig.class
+payroll/LoadDatabase.class
+payroll/EmploymentNotFoundAdvice.class
 payroll/Employee.class
 payroll/Quote.class
 payroll/ExampleData.class
 payroll/ExamplePostResponse.class
 payroll/EmployeeNotFoundException.class
-payroll/LoadDatabase.class
