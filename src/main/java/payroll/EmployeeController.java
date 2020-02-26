@@ -127,11 +127,6 @@ class EmployeeController {
       .orElseThrow(() -> new EmployeeNotFoundException(id));
   
       return new ResponseEntity<Employee>(employee, HttpStatus.OK);
-
-    // return new EntityModel<>(employee,
-    //   linkTo(methodOn(EmployeeController.class).one(id)).withSelfRel(),
-    //   linkTo(methodOn(EmployeeController.class).all()).withRel("employees"));
-
   }
 
   @PutMapping("/employees/{id}")
