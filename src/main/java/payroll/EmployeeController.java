@@ -53,53 +53,73 @@ class EmployeeController {
     return new ResponseEntity<Quote>(quote, HttpStatus.OK);
   }
 
-  <T> T getRequest(final String url, final Class<T> c){
+  @GetMapping("/webclientPostExample")
+  ResponseEntity<Map> webclientPostExample() {
+
+    final String url = "http://localhost:8080/error";
+    final String response = webclientPostWithHeader(url);
+
+    final Map<String, Object> map = new HashMap();
+    map.put("status", Integer.valueOf(200));
+    map.put("response", response);
+
+    return new ResponseEntity<Map>(map, HttpStatus.OK);
+  }
+
+  <T> T getRequest(final String url, final Class<T> c) {
     return new RestTemplate().getForObject(url, c);
   }
 
-  <T> T getRequestWithWebClient(final String url, final Class<T> c){
+  <T> T getRequestWithWebClient(final String url, final Class<T> c) {
     final WebClient client = WebClient.create(url);
     final Mono<T> result = client.get().retrieve().bodyToMono(c);
     final T res = result.block();
     return res;
   }
 
+  // an example of WebClient using POST + header
+  String webclientPostWithHeader(final String url) {
+    final WebClient client = WebClient.builder().baseUrl(url).build();
+
+    // header is added here or as a default header after .baseUrl above
+    // (eg .baseUrl(url).defaultHeader())
+    final WebClient.RequestHeadersSpec<?> request = client.post().header("accept", "text/html");
+
+    final String response = request.exchange().block().bodyToMono(String.class).block();
+
+    return response;
+  }
+
   void postRequestWithWebClient() {
 
     // Step 1: build a WebClient
-    String url = "http://dummy.restapiexample.com/api/v1";
-    WebClient client = WebClient.builder()
-      .baseUrl(url)
-      .build();
+    final String url = "http://dummy.restapiexample.com/api/v1";
+    final WebClient client = WebClient.builder().baseUrl(url).build();
 
     // Step 2: post body (example with MultiValueMap)
     // post with uri and body
-    MultiValueMap<String, Object> body = buildMapBody();
-    WebClient.RequestHeadersSpec<?> request = client
-      .post()
-      .uri("/create")
-      .body(BodyInserters.fromMultipartData(body));
-      
+    final MultiValueMap<String, Object> body = buildMapBody();
+    final WebClient.RequestHeadersSpec<?> request = client.post().uri("/create")
+        .body(BodyInserters.fromMultipartData(body));
+
     // Step 2: post body (example with Class)
     // post with uri and body
-    //  ExampleData body = new ExampleData(Long.valueOf(12), "Peter", "111", Integer.valueOf(25));
+    // ExampleData body = new ExampleData(Long.valueOf(12), "Peter", "111",
+    // Integer.valueOf(25));
     // WebClient.RequestHeadersSpec<?> request = client
     // .post()
     // .uri("/create")
     // .body(BodyInserters.fromPublisher(Mono.just(body), ExampleData.class));
 
     // Step 3: get the response
-    ExamplePostResponse response = request.exchange()
-    .block()
-    .bodyToMono(ExamplePostResponse.class)
-    .block();
+    final ExamplePostResponse response = request.exchange().block().bodyToMono(ExamplePostResponse.class).block();
 
     System.out.println("post response: " + response.toString());
   }
 
   MultiValueMap<String, Object> buildMapBody() {
     // body to be post
-    MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
+    final MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
     body.add("name", "test");
     body.add("salary", "123");
     body.add("age", 23);
