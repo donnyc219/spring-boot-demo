@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -31,6 +32,8 @@ class EmployeeController {
 
   private final EmployeeRepository repository;
   
+  @Autowired
+  private FooFormatter fooFormatter;
 
   // An EmployeeRepository is injected by constructor into the controller.
   EmployeeController(final EmployeeRepository repository) {
@@ -41,6 +44,8 @@ class EmployeeController {
 
   @GetMapping("/employees")
   List<Employee> all() {
+    String name = this.fooFormatter.format();
+    System.out.println("there you go: " + name);
     postRequestWithWebClient();
     return repository.findAll();
   }

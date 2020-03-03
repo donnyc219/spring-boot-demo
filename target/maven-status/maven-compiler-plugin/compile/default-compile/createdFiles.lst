@@ -4,6 +4,7 @@ payroll/EmployeeController.class
 payroll/EmployeeRepository.class
 payroll/SpringFoxConfig.class
 payroll/LoadDatabase.class
+payroll/FooFormatter.class
 payroll/EmploymentNotFoundAdvice.class
 payroll/Employee.class
 payroll/Quote.class
