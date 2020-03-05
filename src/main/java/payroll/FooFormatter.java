@@ -1,9 +1,9 @@
 package payroll;
 
-// import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service("fooFormatter")
+// or @Component, @Repository, depending on situation
+@Service("fooFormatter")    
 public class FooFormatter {
 
     public String format() {

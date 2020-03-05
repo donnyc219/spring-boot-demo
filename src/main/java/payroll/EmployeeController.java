@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -35,6 +37,12 @@ class EmployeeController {
   @Autowired
   private FooFormatter fooFormatter;
 
+  @Value("${name}")
+  private String name;
+
+  @Value("${environment}")
+  private String env;
+
   // An EmployeeRepository is injected by constructor into the controller.
   EmployeeController(final EmployeeRepository repository) {
     this.repository = repository;
@@ -44,18 +52,32 @@ class EmployeeController {
 
   @GetMapping("/employees")
   List<Employee> all() {
-    String name = this.fooFormatter.format();
+    final String name = this.fooFormatter.format();
     System.out.println("there you go: " + name);
     postRequestWithWebClient();
     return repository.findAll();
   }
 
   @GetMapping("/quote")
-  ResponseEntity<Quote> getQuote(){
+  ResponseEntity<Quote> getQuote() {
+
     final String url = "https://gturnquist-quoters.cfapps.io/api/random";
     // Quote quote = getRequest(url, Quote.class);
     final Quote quote = getRequestWithWebClient(url, Quote.class);
+
     return new ResponseEntity<Quote>(quote, HttpStatus.OK);
+  }
+
+  @GetMapping("/envVar")
+  ResponseEntity<String> environmentVariable() {
+
+    // Reference: http://dolszewski.com/spring/spring-boot-application-properties-file/
+    // Section: Profile specific configuration
+    // Where to determine which profile to use: application.properties file
+    System.out.println("This is my boy: " + name);
+    System.out.println("This is my env: " + env);
+
+    return new ResponseEntity<String>("Done", HttpStatus.OK);
   }
 
   @GetMapping("/webclientPostExample")
